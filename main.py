@@ -7,32 +7,17 @@ import os
 # Load the dataset
 df = pd.read_csv('drug_listings.csv')
 
-# Display the first 5 rows of the dataset
-print(df.head())
+# Remove missing values
+df_wmv = df.dropna()
 
-# Display the last 5 rows of the dataset
-print(df.tail())
+# Convert all columns types to string
+df_wmv = df_wmv.astype(str)
 
-# Display the shape of the dataset
-print(df.shape)
+non_numerical_chars = df_wmv['price'].str.replace(r'[0-9.]', '').unique()
+# Remove these characters from the price column and add them to a new column: "currency_name"
+df_wmv['currency_name'] = df_wmv['price'].str.replace(r'[0-9.]', '')
 
-# Display the columns of the dataset
-print(df.columns)
+for currency in non_numerical_chars:
+    print(df_wmv[df_wmv['currency_name'] == currency]['price'])
 
-# Display the data types of the columns
-print(df.dtypes)
 
-# Display the number of missing values in each column
-print(df.isnull().sum())
-
-# Display the number of unique values in each column
-print(df.nunique())
-
-# Display the summary statistics of the dataset
-print(df.describe())
-
-# Display the correlation matrix of the dataset
-print(df.corr())
-
-# Display the count of each unique value in the 'product_title' column
-print(df['product_title'].value_counts())
